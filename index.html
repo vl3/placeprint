@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Placeprint — minimalist map posters of any place</title>
+<meta name="description" content="Make a minimalist map poster of your city, your street, or the place where it all started. Free to design and download. Print-ready 300 DPI files for $12, once.">
+<meta property="og:title" content="Placeprint — map posters of any place">
+<meta property="og:description" content="Type a place, pick a style, download a print. Free to design. Print-ready 300 DPI files for $12, once.">
+<meta property="og:image" content="https://vl3.github.io/placeprint/examples/og.jpg">
+<meta property="og:url" content="https://vl3.github.io/placeprint/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231d1d1b'/%3E%3Cpath d='M6 22 L14 9 L19 17 L26 7 M9 26 L25 26' stroke='%23f3eee4' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&family=Jost:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<link href="styles.css" rel="stylesheet">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="./">Placeprint</a>
+  <nav><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></nav>
+</header>
+
+<main class="app">
+  <section class="stage" id="stage" aria-label="Poster preview">
+    <div class="poster" id="poster">
+      <div class="mapwrap" id="mapwrap"><div class="mapinner" id="mapinner"></div></div>
+      <canvas class="over" id="over"></canvas>
+    </div>
+    <div class="zoom">
+      <button type="button" id="zin" aria-label="Zoom in">+</button>
+      <button type="button" id="zout" aria-label="Zoom out">&minus;</button>
+    </div>
+    <p class="hint">Drag to move &middot; scroll or pinch to zoom</p>
+  </section>
+
+  <aside class="panel">
+    <h1>Any place, as a print.</h1>
+    <p class="lede">Your city, your street, the spot where it all started. Design it here for free.</p>
+
+    <div class="field search">
+      <label for="q">Place</label>
+      <input id="q" type="search" placeholder="Search a city, street or address" autocomplete="off" spellcheck="false">
+      <ul class="results" id="results" role="listbox" hidden></ul>
+    </div>
+
+    <div class="field">
+      <span class="label">Style</span>
+      <div class="swatches" id="themes" role="radiogroup" aria-label="Style"></div>
+    </div>
+
+    <div class="field">
+      <span class="label">Shape</span>
+      <div class="seg" id="shapes" role="radiogroup" aria-label="Shape"></div>
+    </div>
+
+    <div class="field">
+      <span class="label">Size</span>
+      <div class="chips" id="formats" role="radiogroup" aria-label="Size"></div>
+    </div>
+
+    <div class="field two">
+      <div><label for="title">Title</label><input id="title" type="text" maxlength="40"></div>
+      <div><label for="subtitle">Subtitle</label><input id="subtitle" type="text" maxlength="60" placeholder="Country, a date, a few words"></div>
+    </div>
+    <div class="field row">
+      <div class="seg small" id="fonts" role="radiogroup" aria-label="Title font"></div>
+      <label class="check"><input type="checkbox" id="coords" checked> Coordinates</label>
+    </div>
+
+    <div class="buy" id="buy">
+      <a class="cta" id="cta" href="#" data-gumroad-overlay-checkout="true">Get the print-ready file &middot; $12</a>
+      <p class="fine" id="ctaFine">300 DPI, up to 7200&thinsp;px, no credit line. One payment, unlimited posters.</p>
+      <button type="button" class="ghost" id="free">Free download (1600&thinsp;px)</button>
+      <details class="license" id="licenseBox">
+        <summary>Already bought? Enter your license key</summary>
+        <form id="licenseForm">
+          <input id="licenseKey" type="text" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" autocomplete="off" spellcheck="false" aria-label="License key">
+          <button type="submit">Unlock</button>
+        </form>
+        <p class="msg" id="licenseMsg" role="status" aria-live="polite"></p>
+      </details>
+    </div>
+  </aside>
+</main>
+
+<div class="progress" id="progress" hidden>
+  <div class="box"><p id="progressText">Rendering your poster…</p><div class="bar"><i id="progressBar"></i></div></div>
+</div>
+
+<section class="info" id="how">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><b>Find the place.</b> Any city, neighborhood, street or address on OpenStreetMap, anywhere in the world.</li>
+    <li><b>Make it yours.</b> Pick a style and a shape, frame it, and write a title: a name, a date, a few words.</li>
+    <li><b>Download and print.</b> Send the file to any print shop, or print it at home. Ready to frame.</li>
+  </ol>
+  <div class="gallery" id="gallery">
+    <figure><img src="examples/barcelona.jpg" width="900" height="1200" loading="lazy" alt="Barcelona street map poster in the Ink style"><figcaption>Barcelona · Ink · Classic</figcaption></figure>
+    <figure><img src="examples/manhattan.jpg" width="900" height="1200" loading="lazy" alt="Manhattan street map poster in the Midnight style"><figcaption>Manhattan · Midnight · Full</figcaption></figure>
+    <figure><img src="examples/venezia.jpg" width="900" height="1200" loading="lazy" alt="Venice map inside a heart with the words Where we met"><figcaption>Venezia · Blush · Heart</figcaption></figure>
+    <figure><img src="examples/paris.jpg" width="900" height="1200" loading="lazy" alt="Paris map in a gold circle on black"><figcaption>Paris · Noir · Circle</figcaption></figure>
+    <figure><img src="examples/amsterdam.jpg" width="900" height="1200" loading="lazy" alt="Amsterdam canal map poster in the Sage style"><figcaption>Amsterdam · Sage · Classic</figcaption></figure>
+    <figure><img src="examples/san-francisco.jpg" width="900" height="1200" loading="lazy" alt="San Francisco map poster with blue water"><figcaption>San Francisco · Harbor · Classic</figcaption></figure>
+    <figure><img src="examples/kyoto.jpg" width="900" height="1200" loading="lazy" alt="Kyoto street grid poster in the Terracotta style"><figcaption>Kyoto · Terracotta · Classic</figcaption></figure>
+    <figure><img src="examples/buenos-aires.jpg" width="900" height="1200" loading="lazy" alt="Buenos Aires map in a circle, black ink on paper"><figcaption>Buenos Aires · Ink · Circle</figcaption></figure>
+  </div>
+</section>
+
+<section class="info" id="pricing">
+  <h2>Pricing</h2>
+  <div class="plans">
+    <div class="plan">
+      <h3>Free</h3>
+      <p class="price">$0</p>
+      <ul><li>Every style, shape and size</li><li>1600&thinsp;px downloads, good for screens and small prints</li><li>A small credit line on the poster</li></ul>
+    </div>
+    <div class="plan pro">
+      <h3>Print-ready</h3>
+      <p class="price">$12 <span>once</span></p>
+      <ul><li>300 DPI files up to 7200&thinsp;px: 18&times;24″, A2, 24&times;36″ at 200 DPI</li><li>No credit line</li><li>Unlimited posters, forever, on this device and any other</li><li>Full refund within 14 days if it isn't right</li></ul>
+      <a class="cta" id="cta2" href="#" data-gumroad-overlay-checkout="true">Get print-ready &middot; $12</a>
+    </div>
+  </div>
+</section>
+
+<section class="info" id="faq">
+  <h2>Questions</h2>
+  <details><summary>Where do I print it?</summary><p>Any print shop or online printer takes the PNG: your local copy shop, Costco, Walgreens, Staples, Mpix, Printful, Prodigi. For a framed look, choose matte paper. The 3:4 size fits standard 12×16″ and 18×24″ frames, 2:3 fits 24×36″, and A fits A4, A3 and A2.</p></details>
+  <details><summary>Is the map data accurate?</summary><p>Streets, water and parks come from OpenStreetMap, the map that volunteers build and keep current around the world. Coverage is excellent in cities. Very remote places may be sparse.</p></details>
+  <details><summary>Can I give it as a gift?</summary><p>Yes, that's what most people make them for: where they met, a first home, a hometown, a marathon route's city. Personal use and gifts are covered. For selling prints, ask first.</p></details>
+  <details><summary>How does the license key work?</summary><p>After checkout, Gumroad shows your key and emails it to you. Paste it under “Already bought?” and the print-ready download unlocks on that browser. Use the same key on any of your devices.</p></details>
+  <details><summary>What if it doesn't work for me?</summary><p>Reply to your Gumroad receipt within 14 days and you'll get a full refund, no questions asked.</p></details>
+  <details><summary>Do you upload or store anything?</summary><p>No. The poster is drawn in your browser. There's no account, and nothing you type leaves your device except the place search.</p></details>
+</section>
+
+<footer class="foot">
+  <p>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &middot; Tiles by <a href="https://openfreemap.org">OpenFreeMap</a> &middot; Search by <a href="https://photon.komoot.io">Photon</a></p>
+  <p>Placeprint is made by one person. Questions or ideas: reply to your receipt, or open an issue on <a href="https://github.com/vl3/placeprint">GitHub</a>.</p>
+</footer>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
