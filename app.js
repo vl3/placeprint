@@ -1,9 +1,8 @@
 'use strict';
 
-// Filled in once the Gumroad product exists.
 const CONFIG = {
-  gumroadUrl: '',
-  productId: '',
+  gumroadUrl: 'https://gumroad.com/l/placeprint-pro',
+  productId: 'VzboQ_LfHCca7MaZUkDztA==',
 };
 
 const TILEJSON = 'https://tiles.openfreemap.org/planet';
